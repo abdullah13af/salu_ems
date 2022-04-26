@@ -1,0 +1,33 @@
+=> install project
+    composer create-project laravel/laravel example-app
+  
+=> run server
+    php artisan serve
+
+=> install breeze to use builtin authentication system
+    composer require laravel/breeze --dev
+    php artisan breeze:install 
+    npm install (before this make sure you have Node.js installed and added to your environment variables)
+    npm run dev (to collect static files)
+    npm run dev (two times required in somecases)
+    php artisan migrate (migrate changes to database) (don't forget to set your database credentials in .env file)
+
+=> setting the webpack.mix.js files to serve static files
+    mix.js('resources/js/app.js', 'public/js').scritps([<multiple resources>], 'public/destination').styles([<multiple resources>], 'public/destination')
+    js      -> for javascript
+    scritps -> for multiple scritps 
+    styles  -> for css
+
+=> routing the urls
+    goto routes -> web.php
+    // routing using controller class
+    Route::get('/admin_dashboard', [AdminController::class, 'index']);
+    // rounting using resources
+    Route::resource('/batches', BatchController::class);
+    // rounting using functions
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+=> create controller, model, and migration in one command
+    php artisan make:model Todo -mcr
