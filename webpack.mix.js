@@ -56,6 +56,7 @@ mix.js('resources/js/app.js', 'public/js').postCss('resources/css/app.css', 'pub
     'resources/vendor/pdfmake/build/pdfmake.min.js',
     'resources/vendor/pdfmake/build/vfs_fonts.js',
     'resources/vendor/js/custom.min.js',
+    'resources/js/dependent-dropdown.js',
 ], 'public/js/scripts.js')
 .styles([
     'resources/vendor/bootstrap/dist/css/bootstrap.min.css',

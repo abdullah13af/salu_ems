@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\Subject;
+use App\Rules\UniqueSubjectDepartment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -54,7 +55,7 @@ class SubjectController extends Controller
     {
         // validation start
         $rules = [
-            'name' => ['required', 'unique:subjects'],
+            'name' => ['required', new UniqueSubjectDepartment($request->input('department_id'), null)],
             'credit_hours' => ['required', 'min:0.1'],
             'semester' => ['required', "in:1, 2, 3, 4, 5, 6, 7, 8"],
             'department_id' => ['required', 'exists:departments,id'],
@@ -62,7 +63,6 @@ class SubjectController extends Controller
         
         $validator = Validator::make($request->all(), $rules, $messages = [
             'name.required' => 'The Subject Name field is required.',
-            'name.unique' => 'The Subject Name is already registered.',
             'credit_hours.required' => 'The Credit Hours field is required.',
             'semester.required' => 'The Semester field is required.',
             'department_id.required' => 'The Department field is required.',
@@ -127,7 +127,7 @@ class SubjectController extends Controller
     {
         // validation start
         $rules = [
-            'name' => ['required', 'unique:subjects,name,'.$id],
+            'name' => ['required', new UniqueSubjectDepartment($request->input('department_id'), $id)],
             'credit_hours' => ['required', 'min:0.1'],
             'semester' => ['required', "in:1, 2, 3, 4, 5, 6, 7, 8"],
             'department_id' => ['required', 'exists:departments,id'],
@@ -135,7 +135,6 @@ class SubjectController extends Controller
         
         $validator = Validator::make($request->all(), $rules, $messages = [
             'name.required' => 'The Subject Name field is required.',
-            'name.unique' => 'The Subject Name is already registered.',
             'credit_hours.required' => 'The Credit Hours field is required.',
             'semester.required' => 'The Semester field is required.',
             'department_id.required' => 'The Department field is required.',
