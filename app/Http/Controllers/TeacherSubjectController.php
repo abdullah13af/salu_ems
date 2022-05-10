@@ -9,6 +9,7 @@ use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Rules\UniqueTeacherSubjectBatch;
 
 
 class TeacherSubjectController extends Controller
@@ -66,14 +67,12 @@ class TeacherSubjectController extends Controller
         $max_year = date("Y");
         $rules = [
             'year' => ['required', "integer", "between:2017,$max_year"],
-            'semester' => ['required'],
             'teacher_id' => ['required', 'exists:teachers,id'],
-            'subject_id' => ['required', 'exists:subjects,id'],
+            'subject_id' => ['required', 'exists:subjects,id', new UniqueTeacherSubjectBatch($request->input('teacher_id'), $request->input('subject_id'), $request->input('batch_id'),null)],
             'batch_id' => ['required', 'exists:batches,id'],
         ];
         
         $validator = Validator::make($request->all(), $rules, $messages = [
-            'semester.required' => 'The Semester field is required.',
             'teacher_id.required' => 'The Teacher field is required.',
             'subject_id.required' => 'The Subject field is required.',
             'batch_id.required' => 'The Batch field is required.',
@@ -87,12 +86,20 @@ class TeacherSubjectController extends Controller
         }
         // validation end
 
+        // check if the semester is odd, than semester session will be spring otherwise fall
+        $semester_no = Subject::where('id', '=', $request->input('subject_id'))->first();
+        $semester_no = intval($semester_no->semester);
+        if($semester_no % 2 == 1)
+            $semester = 'spring';
+        else
+            $semester = 'fall';
+
         TeacherSubject::create([
             'subject_id' => $request->input('subject_id'),
             'batch_id' => $request->input('batch_id'),
             'teacher_id' => $request->input('teacher_id'),
             'year' => $request->input('year'),
-            'semester' => $request->input('semester'),
+            'semester' => $semester,
         ]);
 
         return redirect('/teachers_subjects');
@@ -149,14 +156,12 @@ class TeacherSubjectController extends Controller
         $max_year = date("Y");
         $rules = [
             'year' => ['required', "integer", "between:2017,$max_year"],
-            'semester' => ['required'],
             'teacher_id' => ['required', 'exists:teachers,id'],
-            'subject_id' => ['required', 'exists:subjects,id'],
+            'subject_id' => ['required', 'exists:subjects,id', new UniqueTeacherSubjectBatch($request->input('teacher_id'), $request->input('subject_id'), $request->input('batch_id'),$id)],
             'batch_id' => ['required', 'exists:batches,id'],
         ];
         
         $validator = Validator::make($request->all(), $rules, $messages = [
-            'semester.required' => 'The Semester field is required.',
             'teacher_id.required' => 'The Teacher field is required.',
             'subject_id.required' => 'The Subject field is required.',
             'batch_id.required' => 'The Batch field is required.',
@@ -169,6 +174,14 @@ class TeacherSubjectController extends Controller
             return redirect('teachers_subjects/create')->withErrors($validator)->withInput();
         }
         // validation end
+        
+        // check if the semester is odd, than semester session will be spring otherwise fall
+        $semester_no = Subject::where('id', '=', $request->input('subject_id'))->first();
+        $semester_no = intval($semester_no->semester);
+        if($semester_no % 2 == 1)
+            $semester = 'spring';
+        else
+            $semester = 'fall';
 
         TeacherSubject::where('id', '=', $id)
         ->update([
@@ -176,7 +189,7 @@ class TeacherSubjectController extends Controller
             'batch_id' => $request->input('batch_id'),
             'teacher_id' => $request->input('teacher_id'),
             'year' => $request->input('year'),
-            'semester' => $request->input('semester'),
+            'semester' => $semester,
         ]);
 
         return redirect('/teachers_subjects');
