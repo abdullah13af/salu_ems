@@ -19,7 +19,7 @@
                     <div class="clearfix"></div>
 
                     <div class="row justify-content-center align-items-center">
-                        <div class="col-md-6 col-sm-12 ">
+                        <div class="col-md-8 col-sm-12">
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2 class="text-center">Add New Department</h2>
