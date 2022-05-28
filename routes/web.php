@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BatchController;
+use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
@@ -26,15 +27,21 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     if(Auth::check())
-        return view('index', ['page_title' => 'Home']);
+        return redirect('/dashboard');
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    if(Auth::check())
-        return view('index', ['page_title' => 'Home']);
-    return view('auth.login');
-});
+// Route::get('/dashboard', function () {
+//     if(Auth::check()) {
+//         if(Auth::user()->teacher != null)
+//             return view('index', ['page_title' => 'Home', 'user_type' => 'Teacher']);
+//         if(Auth::user()->student != null)
+//             return view('index', ['page_title' => 'Home', 'user_type' => 'Student']);
+
+//         return view('admin_dashboard', ['page_title' => 'Home', 'user_type' => 'Admin']);
+//     }
+//     return view('auth.login');
+// });
 // // teachers depenedent dropdown start
 // Route::get('get_teachers/{id}', function ($id) {
 //     $teachers = DB::table('users')
@@ -61,4 +68,5 @@ Route::resource('/teachers', TeacherController::class);
 Route::resource('/students', StudentController::class);
 Route::resource('/subjects', SubjectController::class);
 Route::resource('/teachers_subjects', TeacherSubjectController::class);
+Route::resource('/dashboard', Dashboard::class);
 
