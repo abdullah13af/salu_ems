@@ -21,10 +21,10 @@ class CreateSubjectMarksTable extends Migration
             $table->foreign('student_id')->references('id')->on('students');
             $table->foreign('subject_id')->references('id')->on('subjects');
             $table->foreign('teacher_id')->references('id')->on('teachers');
-            $table->decimal('mid_marks', 5, 2);
-            $table->decimal('sessional_marks', 5, 2);
-            $table->decimal('practical_marks', 5, 2);
-            $table->decimal('final_marks', 5, 2);
+            $table->decimal('mid_marks', 5, 2)->nullable();
+            $table->decimal('sessional_marks', 5, 2)->nullable();
+            $table->decimal('practical_marks', 5, 2)->nullable();
+            $table->decimal('final_marks', 5, 2)->nullable();
             $table->boolean('locked');
             $table->timestamps();
         });

@@ -7,6 +7,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\SubjectMarkController;
 use App\Http\Controllers\TeacherSubjectController;
 use App\Models\Department;
 use App\Models\Subject;
@@ -61,6 +62,9 @@ Route::get('get_subjects/{id}', function ($id) {
 
 require __DIR__.'/auth.php';
 
+// my subject rout show subjects of a specific teacher
+Route::get('teachers/my_subjects', 'App\Http\Controllers\TeacherController@my_subjects');
+
 // resources general routes
 Route::resource('/batches', BatchController::class);
 Route::resource('/departments', DepartmentController::class);
@@ -70,3 +74,8 @@ Route::resource('/subjects', SubjectController::class);
 Route::resource('/teachers_subjects', TeacherSubjectController::class);
 Route::resource('/dashboard', Dashboard::class);
 
+Route::get('subjects_marks/{id}', [
+    'as' => 'subjects_marks.index',
+    'uses' => 'App\Http\Controllers\SubjectMarkController@index'
+]);
+Route::resource('/subjects_marks', SubjectMarkController::class, ['except' => 'index']);

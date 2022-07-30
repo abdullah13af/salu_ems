@@ -51,12 +51,12 @@ class Dashboard extends Controller
 
     public function teacher_dashboard() {
         $page_title = 'Teacher Dashboard';
-        $teacher_subjects = TeacherSubject::where("teacher_id", "=", Auth::user()->id);
-        $teacher_subjects_count = TeacherSubject::where("teacher_id", "=", Auth::user()->id)->count();
-        
+        $teacher_subjects = TeacherSubject::where("teacher_id", "=", Auth::user()->teacher->id);
+        $teacher_subjects_count = TeacherSubject::where("teacher_id", "=", Auth::user()->teacher->id)->count();
 
         $context = [
             'page_title' => $page_title,
+            'teacher_subjects' => $teacher_subjects,
             'teacher_subjects_count' => $teacher_subjects_count,
         ];
         return view('dashboards/teacher_dashboard', $context);

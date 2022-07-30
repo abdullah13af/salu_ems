@@ -1,7 +1,7 @@
 <div class="col-md-3 left_col">
   <div class="left_col scroll-view">
     <div class="navbar nav_title" style="border: 0;">
-      <a href="{{ url('index') }}" class="site_title"><img src="{{ asset('images/logo-white-outline.png') }}" alt="SALU EMS Logo"></a>
+      <a href="{{ url('dashboard') }}" class="site_title"><img src="{{ asset('images/logo-white-outline.png') }}" alt="SALU EMS Logo"></a>
     </div>
 
     <div class="clearfix"></div>
@@ -28,6 +28,8 @@
           <li>
             <a href="{{ url('dashboard') }}"><i class="fa fa-solid fa-gauge-high"></i> Dashboard</a>
           </li>
+
+          {{-- if user is admin start --}}
           @if (Auth::user()->teacher == null && Auth::user()->student == null)
             <li><a><i class="fa fa-solid fa-person-chalkboard"></i> Teachers <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
@@ -66,6 +68,15 @@
               </ul>
             </li>
           @endif
+          {{-- if user is admin end --}}
+
+          {{-- if user is teacher start --}}
+          @if (Auth::user()->teacher)
+            <li>
+              <a href="{{ url('teachers/my_subjects') }}"><i class="fa fa-solid fa-book"></i> My Subjects</a>
+            </li>
+          @endif
+          {{-- if user is teacher end --}}
         </ul>
       </div>
       

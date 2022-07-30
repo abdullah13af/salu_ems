@@ -27,4 +27,33 @@ class TeacherSubject extends Model
         return $this->belongsTo(Batch::class);
     }
     
+
+    /**
+     * The "booted" method of the model.
+     * This will execute when a new subject is created
+     * this will create subject marks entries
+     * 
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::created(function ($teachersubject) {
+            // get all students with the teachersubject department
+            $students = Student::where('batch_id', '=', $teachersubject->batch_id)->get();
+            // iterate over all students and create the subjectmark entry
+            foreach ($students as $student) {
+                SubjectMark::create([
+                    'student_id' => $student->id,
+                    'subject_id' => $teachersubject->subject_id,
+                    'teacher_id' => $teachersubject->teacher_id,
+                    'mid_marks' => null,
+                    'sessional_marks' => null,
+                    'practical_marks' => null,
+                    'final_marks' => null,
+                    'locked' => false,
+                ]);
+                error_log('creating subjectsmarks...');
+            }
+        });
+    }
 }

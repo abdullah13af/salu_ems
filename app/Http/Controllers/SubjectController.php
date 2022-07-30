@@ -74,6 +74,7 @@ class SubjectController extends Controller
         }
         // validation end
 
+        // create subject
         Subject::create([
             'name' => $request->input('name'),
             'credit_hours' => $request->input('credit_hours'),
@@ -83,6 +84,7 @@ class SubjectController extends Controller
 
         return redirect('/subjects');
     }
+    
 
     /**
      * Display the specified resource.

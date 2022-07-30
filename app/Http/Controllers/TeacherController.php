@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Teacher;
 use App\Models\User;
 use App\Models\Department;
+use App\Models\Subject;
+use App\Models\TeacherSubject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
@@ -27,6 +29,24 @@ class TeacherController extends Controller
             'page_title' => $page_title
         ];
         return view('teachers/index', $context);
+    }
+
+    /**
+     * Display a listing of the resource that matches me.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function my_subjects()
+    {
+        $page_title = 'My Subjects';
+        $subject_ids = TeacherSubject::where('teacher_id', '=', Auth::user()->teacher->id)->pluck('subject_id')->toArray();
+        $subjects = Subject::whereIn('id', $subject_ids)->get();
+        
+        $context = [
+            'subjects' => $subjects,
+            'page_title' => $page_title
+        ];
+        return view('teachers/my_subjects', $context);
     }
 
     /**
